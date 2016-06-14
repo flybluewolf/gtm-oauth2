@@ -290,9 +290,11 @@ finishedWithFetcher:(GTMOAuth2Fetcher *)fetcher
                                      clientID, @"client_id",
                                      scope, @"scope", // scope may be nil
                                      nil];
+  /*
   if (redirectURI) {
     [paramsDict setObject:redirectURI forKey:@"redirect_uri"];
   }
+  */
   return paramsDict;
 }
 
@@ -399,7 +401,8 @@ finishedWithFetcher:(GTMOAuth2Fetcher *)fetcher
   BOOL isCallback;
   if (requestHost && requestPath) {
     isCallback = [[redirectURL host] isEqual:[requestURL host]]
-                 && [[redirectURL path] isEqual:[requestURL path]];
+                  && ([[redirectURL path] isEqual:[requestURL path]] 
+                  || ([[redirectURL path] isEqual:@""] && [[requestURL path] isEqual:@"/"]));
   } else if (requestURL) {
     // handle "about:blank"
     isCallback = [redirectURL isEqual:requestURL];
