@@ -736,6 +736,8 @@ static Class gSignInClass = Nil;
     }
   }
 
+  [self.navigationController setNavigationBarHidden:NO animated:animated];
+
   [super viewWillAppear:animated];
 }
 
@@ -747,6 +749,8 @@ static Class gSignInClass = Nil;
 - (void)viewWillDisappear:(BOOL)animated {
   if (![self isBeingObscured:self]) {
     if (!didDismissSelf_) {
+      [self cancelSigningIn];
+    
       // We won't receive further webview delegate messages, so be sure the
       // started loading notification is balanced, if necessary
       [self notifyWithName:kGTMOAuth2WebViewStoppedLoading
@@ -776,6 +780,9 @@ static Class gSignInClass = Nil;
   [[NSNotificationCenter defaultCenter] postNotificationName:kGTMOAuth2CookiesDidSwapIn
                                                       object:self
                                                     userInfo:nil];
+
+  [self.navigationController setNavigationBarHidden:YES animated:animated];
+
   [super viewWillDisappear:animated];
 }
 
